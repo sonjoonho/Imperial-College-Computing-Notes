@@ -1,0 +1,245 @@
+# 07 - Evolutionary Algorithms
+
+Evolutionary algorithms are an optimisation algorithm for **black-box functions** (no access to the gradient). 
+
+![image-20200301013900178](Untitled.assets/image-20200301013900178.png)
+
+Genetic algorithms use a simplified version of Neo-darwinism as a common base:
+
+1. Manipulate a **population of solutions**, initially randomly generated.
+2. Each solution is represented by a **genotype**.
+3. The genotype can be developed into a **phenotype**.
+4. They use a **fitness function** to measure the performance of the phenotypes.
+5. The **fittest individuals** have a higher probability to pass part of their genotype to the offspring.
+
+## Genetic Operators
+
+The algorithms are often defined according to three main operators:
+
+- **Selection** - selects the solutions that will be produced.
+- **Cross-over** - mixes the parents' genotype.
+- **Mutation** - type and frequency of the variations applied to the genotype after reproduction.
+
+## Differences
+
+Algorithms differ by the definition of the genotype and the genetic operators used.
+
+| Name                    | Genotype                      | Cross-over                                                   | Mutation                          |
+| ----------------------- | ----------------------------- | ------------------------------------------------------------ | --------------------------------- |
+| Genetic Algorithm       | Binary string of fixed size   | Swap portions of the string                                  | Random bit flips                  |
+| Genetic Programming     | Program represented as a tree | Swap portions of trees                                       | Change the symbols in the tree    |
+| Evolutionary Strategies | String of floats/doubles      | Usually not used (because the entire population can be represented as a distribution) | Draw from a Gaussian distribution |
+
+## Evolutionary Algorithms
+
+Now, we mix all these approaches. 
+
+- Genotypes are often strings of floats/doubles
+- These genotypes can be used to encode graphs
+- Heterogenous list of parameters
+- Large number of variants of the operators
+
+and we now call them **Evolutionary Algorithms (EA)**. We will look at the different components to an evolutionary algorithm, and use the example of Mastermind.
+
+### Fitness Function
+
+The **fitness function** represents the *problem we want to solve*. Maximising the fitness function is equivalent to solving the problem, and it expresses how good a solution is for the problem.
+
+For the Mastermind game:
+
+- $p_1$ = number of pieces with the right colour and correct position.
+- $p_2$ = number of pieces with the right colour but the wrong position.
+- $F(x) = p_1 + 0.5 p_2$ 
+  - We want to have as many pieces with the right colour *and* position, but it's a bit less important to have pieces with the right colour but with the wrong position.
+
+We need to make sure that the *maximum of this function corresponds to solving the problem* ($F(x) = 4$, all 4 are correct colour and position) and that there is no other combination of colours that provides something that is higher when the solution is valid. 
+
+The fitness function is *problem specific*. 
+
+> Teaching a robot to throw an object to a target?
+>
+> $F(x) = -\text{distance}(\text{object}, \text{target})$
+
+In EA we usually maximise (fittest individuals), while in NNs we minimise. The principle is the same: a minimisation problem can be turned into a maximisation problem with just a minus sign.
+
+### Genotype and Phenotype
+
+The **genotype** and **phenotype** represent the *potential solutions to the problem*.
+
+For the Mastermind game, given $N$ the number of hidden pieces and 6 possible colours:
+
+- Genotype - a binary string with $3N$ bits
+- Phenotype - aggregate the bits 3 by 3, each trio of bits is turned into an integer
+- Then each integer corresponds to a different colour (0 = red, 1 = yellow, ...)
+
+An issue with this is that there are possible combinations of bits that are not valid colours. We can deal with this simply assigning wrongly-defined DNA the lowest possible fitness score. Hence, they will not survive.
+
+### Selection Operator
+
+The **selection operator** *selects* the parents for the next generation.
+
+#### Biased Roulette Wheel
+
+The likelihood for an individual to be selected is proportional to its fitness.
+
+1. Compute the probability $p_i$ to select an individual from a population.
+   $$
+   p_i = \frac{f_i}{\sum_{j=1}^n f_j}
+   $$
+
+2. Compute the cumulative probability.
+   $$
+   q_i = \sum_{j=1}^i p_j
+   $$
+
+3. Randomly generate (uniform distribution) a number $r$ between 0 and 1.
+
+4. Select the individual $x_i$ such that $q_{i-1} < r \leq q_i$.
+
+#### Tournament 
+
+1. Randomly draw two individuals from the population.
+2. Select the best of the two.
+3. Repeat until you have enough parents.
+
+Variants:
+
+- Drawing multiple individuals.
+- Not always selecting the best one.
+
+Advantages
+
+- Takes into account only *relative* values of the fitness.
+- Easy to parallelise.
+
+### Elitism
+
+**Elitism** is where the new generation contains a fraction of the best individuals found so far, instead of replacing the current generation. This fraction is usually fixed to 10%. The advantage of this is that the fitness of the best individual in the population *cannot decrease*.
+
+### Cross-over Operator
+
+The **cross-over operator** *combines the traits* of the parents.
+
+Single-point cross-over is the standard operator on strings. A split point is randomly picked, the genotype of the offspring is formed by exchanging the portions of genotype. Multiple split-point variant exist.
+
+![image-20200301164900640](07 - Evolutionary Algorithms.assets/image-20200301164900640.png)
+
+### Mutation Operator
+
+The **mutation operator** *explores* nearby solutions.
+
+1. For each bit of the genotype, a number is randomly generated between 0 and 1 (uniform distribution).
+2. If this number is lower than a probability $m$ (hyperparameter), the bit is flipped.
+3. $m$ is often fixed to $\frac{1}{\text{size of the genotype}}$.
+
+On average, you only want to change 1 or 2 bits, because if you change every bit then you are doing a random search and not a genetic algorithm. *Good solutions are next to good solutions*, so you want to follow progressively small variations of a good solution.
+
+We can also add a specific mutation for the Mastermind problem. With the standard operators, we cannot exploit the information: good color, wrong place (we cannot move a part of the genotype). We can swap groups of 3 bits in the genotype with a probability $m_2$.
+
+### Mastermind Summary
+
+1. Randomly generate a population of $N$ binary strings.
+
+2. Evaluate the fitness of each individual using the "game engine"
+   $$
+   F(x) = p_1 + 0.5 p_2
+   $$
+
+3. Select $\frac{N}{2}$ couples of parents (or less if elitism), w.r.t the fitness.
+
+4. For each couple, create their offspring with the cross-over operator.
+
+5. Mutate each child.
+
+6. Replace the old population with the new one, return to 2.
+
+## Evolutionary Strategies
+
+In genetic algorithms, we saw that the genotype could be represented as a binary string, and the goal was to optimise a parameter list of integers. Now we will see how to deal with *real-valued* parameters.
+
+In **Evolutionary Strategy**
+
+- Genotype - list of reals
+- Parent selection - uniform
+  - Note that there is no selection method.
+- Mutation - generated from a Gaussian
+  - Instead of representing the population as a set of genotypes, we use a Gaussian distribution. So the definition of a population is defined as the mean and variance of this distribution.
+
+They are similar in that they share the notion of population and selection. However, they differ in their genotype, and ES has no cross-over or selection method. 
+
+### ($\mu + \lambda$)-ES
+
+1. Randomly generate a population of $(\mu + \lambda)$ individuals.
+
+2. Evaluate the population.
+
+3. Select the $\mu$ best individuals from the population as parents (called $x$).
+
+4. Generate $\lambda$ offsprings (called $y$) from the parents, applying a Gaussian noise mutation.
+   $$
+   y_i = x_j + N(0, \sigma)
+   $$
+   where $j = randi(\mu)$, and $\sigma$ is a hyperparameter which controls the amplitude of the mutation.
+
+5. Population = union of the parents and offspring.
+   $$
+   pop = (\cup_i^\lambda y_i) \cup (\cup_j^\mu x_j)
+   $$
+
+6. Return to 2.
+
+Usually $\frac{\lambda}{\mu} \approx 5$. The main challenge is fixing $\sigma$.
+
+#### Finding $\sigma$
+
+- Large $\sigma$ - the population moves quickly to the solution, but has a hard time refining it.
+- Small $\sigma$ - the population moves slowly and might be more affected by local optimums.
+
+![image-20200302193445010](07 - Evolutionary Algorithms.assets/image-20200302193445010.png)
+
+We can adapt $\sigma$ over time, and let the algorithm decide what value is best. We add $\sigma$ to the genotype $x$:
+$$
+\begin{align*}
+x_j' &= \{x_j, \sigma_j\} \\
+\sigma_i &= \sigma_j \exp(\tau_0 N(0, 1)) \\
+y_i &= x_j + \sigma_i N(0, 1)
+\end{align*}
+$$
+where $\tau_0$ is the **learning rate**.
+
+## Other Approaches for Reals
+
+Other variant os ES
+
+- **CMA-ES** - evolution of a covariance matrix.
+  - Instead of just using a Gaussian to add perturbation, we encode the entire population as a Gaussian distribution.
+- **BLX-alpha** - adding cross-over
+
+Other variants of genetic algorithms:
+
+- Discretise the parameters and use binary strings.
+- Use normal genetic algorithms, but with a *list of reals* instead of bits. 
+
+## Advantages
+
+- They work on **black-box** problems (e.g. hyperparameters of NNs)
+- Good **exploration capabilities**
+  - If there is enough diversity, we can expect that some individuals will explore other regions and leave the local optimums.
+- Easy to **parallelise**
+  - We can just perform the evaluation in parallel.
+
+## Disadvantages
+
+- Slower than gradient descent when the gradient is known and when the problem is simple (e.g. convex).
+
+## Novelty Search
+
+Instead of trying to maximise performance in the population, we try and maximise **novelty**. For each individual, we want to know how different it is to every other creature discovered previously. The **novelty archive** collects all the different types of creatures the algorithm has created. When you create a new creature, you compute the distance between it and the $k$-nearest neighbours.
+
+![image-20200302195735295](07 - Evolutionary Algorithms.assets/image-20200302195735295.png)
+
+### Local Competition
+
+In these version above, we no longer focus on the task. This variant allows to do both. We use a multi-objective EA to optimise both **novelty** and **local competition**. This means evaluating how good our new solution is compared to other *similar* individuals.
+
+![image-20200302201426178](07 - Evolutionary Algorithms.assets/image-20200302201426178.png)
