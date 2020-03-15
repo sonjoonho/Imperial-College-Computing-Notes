@@ -6,7 +6,7 @@ In CNNs, each neuron only sees a small local region in the layer before it. This
 $$
 r_{out} = r_{in} + (k-1)\times j_{in}
 $$
-where $j_{in}$ is the jumo of the previous layer. 
+where $j_{in}$ is the jump of the previous layer. 
 
 ![image-20200216140645659](10 - Neural Networks II.assets/image-20200216140645659.png)
 

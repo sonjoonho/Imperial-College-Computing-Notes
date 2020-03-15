@@ -57,7 +57,7 @@ $$
 y^{(i)} = \theta_1x_1^{(i)} + ... + \theta_K x_K^{(i)} + \theta_{K+1}
 $$
 
-![image-20200205134533572](04 - Neural Networks I.assets/image-20200205134533572.png)
+![image-20200205134533572](04 - Neural Networks I.assets/image-20200205134533572.png)	
 
 This can result in a better model, but there is a greater risk of overfitting.
 
