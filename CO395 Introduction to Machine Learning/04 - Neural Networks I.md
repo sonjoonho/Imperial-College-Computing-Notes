@@ -56,6 +56,7 @@ In simple linear regression we had a single input feature. In multiple linear re
 $$
 y^{(i)} = \theta_1x_1^{(i)} + ... + \theta_K x_K^{(i)} + \theta_{K+1}
 $$
+
 ![image-20200205134533572](04 - Neural Networks I.assets/image-20200205134533572.png)
 
 This can result in a better model, but there is a greater risk of overfitting.
@@ -104,8 +105,8 @@ $$
 g(z) = \frac{1}{1+e^{-z}} \\
 z \in [-\infty, \infty] \quad \hat{y} \in [0, 1]
 $$
-![image-20200205131947834](04 - Neural Networks I.assets/image-20200205131947834.png)
 
+![image-20200205131947834](04 - Neural Networks I.assets/image-20200205131947834.png)
 
 ### Perceptron
 
@@ -155,6 +156,7 @@ Compress the output smoothly into the range 0 and 1. It is a soft version of the
 $$
 f(x) = \sigma(x) = \frac{1}{1+e^{-x}}
 $$
+
 ![image-20200205134803954](04 - Neural Networks I.assets/image-20200205134803954.png)
 
 ### Tanh Activation
@@ -163,6 +165,7 @@ Similar shape to the sigmoid, but ranges between 1 and -1. Input 0 corresponds t
 $$
 f(x) = \tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}
 $$
+
 ![image-20200205134924378](04 - Neural Networks I.assets/image-20200205134924378.png)
 
 ### ReLU Activation
