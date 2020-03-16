@@ -197,7 +197,7 @@ $$
 $$
 **Sample error** - error rate based on a data set, estimation of true error.
 $$
-\text{error}_D(h) \equiv \frac{1}{N} \sum_{x\in S}\sigma(f(x), h(x))
+\text{error}_S(h) \equiv \frac{1}{N} \sum_{x\in S}\sigma(f(x), h(x))
 $$
 where $n$ is the number of samples and
 $$
@@ -210,7 +210,7 @@ $$
 
 ### Calculation
 
-**$N\%$ confidence interval for $q$** - there is probability $N\%$ that the interval contains $q$.
+**$N\%$ confidence interval for some parameter $q$** - there is probability $N\%$ that the interval contains $q$.
 $$
 \text{error}_S(h) \pm Z_N \sqrt{\frac{\text{error}_S(h)\times (1-\text{error}_S(h))}{n}}
 $$

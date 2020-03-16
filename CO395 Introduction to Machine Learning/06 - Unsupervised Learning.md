@@ -6,6 +6,11 @@ $$
 $$
 **Clustering**, **density estimation**, **dimensionality reduction** are examples of unsupervised learning.
 
+## Bias-variance Tradeoff
+
+- **Bias error** - caused by erroneous assumptions in the learning algorithm. High bias can lead to the model missing relevant relations between the features and outputs (underfitting).
+- **Variance error** - caused by sensitivity due to small fluctuations in the training set. High variance can lead to modelling random noise (overfitting).
+
 ## Clustering
 
 A **cluster** is a set of instances that are "similar" to each other, and "dissimilar" to instances in other groups/clusters.
@@ -148,7 +153,7 @@ Increasing $h$ smooths out $\hat{p}(x)$. This is similar to the concept of **loc
 
 ### Parametric
 
-**Parametric method** *make assumptions about the form of the data*; this means that they have **high bias**. However, the number of parameters is *fixed* and does not grow with data, so they have **low variance**.
+**Parametric methods** *make assumptions about the form of the data*; this means that they have **high bias**. However, the number of parameters is *fixed* and does not grow with data, so they have **low variance**.
 
 #### Multivariate Gaussian Distributions
 
