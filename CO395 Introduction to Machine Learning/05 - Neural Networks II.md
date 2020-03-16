@@ -280,7 +280,7 @@ Adding some information or constraints to prevent overfitting.
 
 For example, penalising how large the model weights can be effectively reduces the model capacity and makes it smoother.
 
-**L2 regularisation** - add the *squared weights* to the loss function. Pushes the weights towards 0, larger weights get penalised more. Encourages sharing between features as small weights are not penalised much,
+**L2 regularisation** - add the sum of all the *squared weights* to the loss function. Pushes the weights towards 0, larger weights get penalised more. Encourages sharing between features as small weights are not penalised much. The sum in the regularisation term denotes the sum over all the weights in the network (loose notation). Note that there is no sum in the update rule since you are differentiating w.r.t a single weight $w$.
 $$
 \begin{align*}
 J(\theta) &= Loss(y, \hat{y}) + \lambda \sum_w w^2 \\
@@ -289,17 +289,17 @@ w &\leftarrow w - \alpha\left( \frac{\partial Loss}{\partial w} + 2\lambda w \ri
 $$
 
 
-**L1 regularisation** - add the *absolute weights* to the loss function. Encourages feature sparsity, the model will only keep the most important features.
+**L1 regularisation** - add the *absolute weights* to the loss function. Encourages feature sparsity, the model will only keep the most important features. I think the $\text{sign}$ function is applied element-wise. It's all a bit confusing.
 $$
 \begin{align*}
 J(\theta) &= Loss(y, \hat{y}) + \lambda \sum_w \lvert w \rvert \\
-w \leftarrow w - \alpha \left( \frac{\partial Loss}{\partial w} \lambda \ \text{sign}(w) \right)
+w &\leftarrow w - \alpha \left( \frac{\partial Loss}{\partial w} + \lambda \ \text{sign}(w) \right)
 \end{align*}
 $$
 
 ### Dropout
 
-During training, randomly set s	ome neural activations to 0. Typically, it is set to 50% in a layer. This is a form of regularisation. It prevents the network from relying on any one node.
+During training, randomly set some neural activations to 0. Typically, it is set to 50% in a layer. This is a form of regularisation. It prevents the network from relying on any one node.
 
 The resulting activations will now be 50% smaller, so we need to scale them back up during testing.
 
