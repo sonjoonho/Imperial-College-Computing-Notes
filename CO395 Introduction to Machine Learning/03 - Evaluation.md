@@ -147,6 +147,10 @@ Randomly select the same number of examples as the minority class.
 
 This will help balance the dataset, but the results will not reflect how well this model will generalise, since the real data is still imbalanced. It's best to look at several metrics and choose ones that reflect the real intended behaviour of the model.
 
+#### Weighted Loss
+
+Weight the classes in your loss.
+
 ## Regression Metrics
 
 $$
@@ -177,7 +181,7 @@ where $Y_i$ is the sample from the dataset, and $\hat{Y}_i$ is the prediction fr
 
 Overfitting occurs when:
 
-- \Learning is performed for too long
+- Learning is performed for too long
 - Training set is not representative of all possible situations
 - The model is too complex
 
