@@ -15,6 +15,14 @@ Aims to guide decision making.
 2. Identify threats (STRIDE/attack trees)
 3. Evaluate and address threats (DREAD, META)
 
+## Attacker Types
+
+- **Eavesdropper** - a passive attacker capable of reading packets sent on the network e.g. wiretapper, WiFi sniffer
+- **Off-path Attacker** - an active attacker but not necessarily positioned between the two victims; can create arbitrary packets and inject them into the network, can act as a legitimate participant in a protocol.
+  - Can spoof replies to DNS lookups, leading to DNS spoofing and rebinding.
+    - Use HTTPS and HTTP public key pinning
+- **Man in the Middle** - an active attacker positioned between the two victims; capable of intercepting network traffic and reading/modifying/creating/deleting packets. It can also act like an off-path attacker if needed.
+
 ## Model the System
 
 **Data-flow diagrams** show the flow of information across system components.

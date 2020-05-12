@@ -19,17 +19,17 @@ Low-level techniques:
 
 - Our focus!
 
-The front-end decodes into micro-ops. If we don't have an allocation stall, the instructions were not allocated in the first place so frontend bound. If backend-bound it was allocated but not executed - cache miss or other. To execute, we need 1. operands and 2. the ALU execution unit to execute on.
+The front-end decodes into micro-ops. If we don't have an allocation stall, the instructions were not allocated in the first place so frontend bound. If backend-bound it was allocated but not executed - cache miss or other. To execute, we need (1) operands and (2) the ALU execution unit to execute on.
 
 ![image-20200314200103210](05 - CPU Efficiency.assets/image-20200314200103210.png)
 
 **Retiring** denotes slots utilized by “good operations”. Ideally, you want to see all slots attributed here since it correlates with Instructions Per Cycle (IPC). Nevertheless, a high Retiring fraction does not necessary mean there is no room for speedup. 
 
-**Bad Speculation** denotes slots wasted due to all aspects of incorrect speculations. It includes: (a) slots of operations that do not eventually retire, and (b) slots where the issue pipeline was blocked due to recovery from earlier mis-speculations. Note there is a third portion covered by Branch_Resteers1. This category can be split per type of speculation. For example, Branch Mispredicts and Machine Clears cover control-flow and data mis-speculation, respectively. 
+**Bad Speculation** denotes slots wasted due to all aspects of incorrect speculations. Can be alleviated by predication to remove control flow dependencies.
 
-**Front End Bound** denotes when the pipeline’s front end under-supplies the back end. Front end is the portion of the pipeline responsible for delivering operations to be executed later by the back end. This category is further classified into Fetch Latency (for example, ICache or ITLB misses) and Fetch Bandwidth (for example, sub-optimal decoding). 
+**Front End Bound** denotes when the pipeline’s front end under-supplies the back end. Front end is the portion of the pipeline responsible for delivering operations to be executed later by the back end. This can cause front end boundness.
 
-**Back End Bound** denotes remaining stalled slots due to lack of required back-end resources to accept new operations. It is split into: Memory Bound which reflects execution stalls due to the memory subsystem, and Core Bound which reflects either pressure on the execution units (compute bound) or lack of Instructions-Level-Parallelism (ILP).
+**Back End Bound** denotes remaining stalled slots due to lack of required back-end resources to accept new operations. It is split into: Memory Bound which reflects execution stalls due to the memory subsystem, and Core Bound which reflects either pressure on the execution units (compute bound) or lack of Instructions-Level-Parallelism (ILP). Data stalls can be alleviated by rearranging data and/or compression. Lack of ILP can be alleviated by utilising SIMD.
 
 ## CPU Efficiency
 
@@ -49,8 +49,12 @@ Cycles-per-instruction is not that useful since the instructions are a parameter
 Stall cycles are a good indicator. These are caused by hazards:
 
 - **Control hazards** - due to data-dependent changes in the control flow
-- **Structural hazards** - due to lack of resources
+  - e.g. a branching instruction that decides another instruction would be executed at all
+- **Structural hazards** - due to lack of resources (execution units)
+  - e.g. more eligible floating point instructions in the pipeline than FPU units in the ALU
 - **Data hazards** - due to data not being available on time
+  - e.g. input operands to one instruction being produced by another instruction
+- **False sharing** - due to unecessary cache-coherence traffic
 
 Here, "resources" refers to cache, registers, execution slots, etc.
 
@@ -98,6 +102,8 @@ This reduces the effect of all three hazards: control, data, and structural.
 
 This keeps the pipeline filled even if no instructions are eligible. This addresses control hazards, but may have a penalty when you mis-speculate.
 
+This is one of the two types of speculation that a CPU performs, the other being prefetching.
+
 ### Instruction-Level Parallelism
 
 #### Superscalar Exececution
@@ -133,6 +139,10 @@ Examples:
 - JiT compilation
 - Symbolic programming
 - Constant evaluation
+
+The advantage is that it eliminates the need to repeatedly evaluate common parts of the code. Note that this is not the same as lifting since it does not introduce any new control flow, but only removes control flow.
+
+The key disadvantage is that partial evaluation moves around computation in hard-to-predict ways, which may increase the cost of cheap sections of the program. It may also cause the evaluation of parts of the code that are never actually executed.
 
 ### Lifting Expensive Operations
 

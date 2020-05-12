@@ -133,6 +133,12 @@ The ratios of each of these to $SST$ show the *percentage of the variation expla
 
 This method can be easily generalised to larger values of $k$. Factors with low explained variation can be removed from follow up experiments.
 
+In the case that $k=3$ use
+$$
+SST = 2^3(q_A^2 + q_B^2 + q_C^2 + q_{AB}^2 + q_{AC}^2 + q_{BC}^2 + q_{ABC}^2)
+$$
+
+
 ### Fractional Factorial Designs
 
 $2^k$ screening require too many experiments. After using an initial $2^k$ screening design, we know which factors strongly interact with each other. We can then decompose the problem into smaller subproblems, with just a few interacting factors.

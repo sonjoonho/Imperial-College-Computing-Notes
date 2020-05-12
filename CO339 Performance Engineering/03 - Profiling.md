@@ -38,6 +38,7 @@ A profile is an aggregate over the events of a specific metric. Examples:
 - Total cache misses
 - Cycles per instruction
 - Cache misses by lines of code
+- Number of branch mispredictions
 
 ## Event Sources
 

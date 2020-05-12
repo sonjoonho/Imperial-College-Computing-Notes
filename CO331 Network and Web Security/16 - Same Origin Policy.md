@@ -27,7 +27,7 @@ The SOP does not prevent outbound communication. It's okay to do cross-domain po
 
 1. The SOP restricts a page to interact with any other pages from the same origin (1, 2).
 2. DNS rebinding gets around the SOP by associating the *attacker's* DNS name to the target's IP address (3).
-3. The main use of this is to circumvent firewalls and access corporate networks through the victim's browser (4, 5).
+3. The main use of this is to circumvent firewalls and access corporate networks *through the victim's browser* (4, 5).
 
 ![image-20200222213517965](Untitled.assets/image-20200222213517965.png)
 

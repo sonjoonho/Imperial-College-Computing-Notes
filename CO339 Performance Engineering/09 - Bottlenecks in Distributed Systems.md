@@ -109,7 +109,7 @@ As we have seen, for a system with $M$ resources, we can describe resource usage
 $$
 U_i = \sum_{c=1}^C \lambda_c D_{ic} i = 1,...,M
 $$
-where we require $U_i \leq 1$ and $\lambda_c \geq 0$. Resource $j$ can saturate *if and only if* there exists a combination of arrival rates $\lambda_1,...,\lambda_C$ such that $U_j = 1$. Whethere a resource can saturate may be verified using the **linear program (LP)** defined over the variables $\lambda_c$
+where we require $U_i \leq 1$ and $\lambda_c \geq 0$. Resource $j$ can saturate *if and only if* there exists a combination of arrival rates $\lambda_1,...,\lambda_C$ such that $U_j = 1$. Whether a resource can saturate may be verified using the **linear program (LP)** defined over the variables $\lambda_c$
 $$
 \begin{align*}
 U_j^{\max} = \text{maximise } &\sum_{c=1}^C \lambda_c D_{jc} \\

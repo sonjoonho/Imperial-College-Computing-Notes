@@ -48,16 +48,18 @@ u \\ v
 \end{bmatrix}
 &&
 A^TA = 
+\sum_p
 \begin{bmatrix}
 I_x^2 & I_xI_y \\
 I_x I_y & I_y^2
 \end{bmatrix}
 &&
 A^T b =
-\sum
+-
+\sum_p
 \begin{bmatrix}
-I_x & I_t \\
-I_y & I_t
+I_x I_t \\
+I_y I_t
 \end{bmatrix}
 \end{align*}
 $$
@@ -76,8 +78,8 @@ Note that the matrix $A^T A$ also appears in the Harris corner detector. The con
       &&
       A^T b = -\sum_p
       \begin{bmatrix}
-      I_x & I_t \\
-      I_y & I_t
+      I_x I_t \\
+      I_y I_t
       \end{bmatrix}
       \end{align*}
       $$

@@ -92,6 +92,6 @@ Essentially a finite state machine with transition probabilities.
 
 Branch predictors can be modelled as Markov chains. The **branch misprediction rate** will converge to the **stationary distribution**.
 $$
-P(pred\_taken) * P(pred\_not\_taken) + P(pred\_not\_taken) * P(pred\_not\_taken)
+P(pred\_taken) * P(pred\_not\_taken) + P(pred\_not\_taken) * P(actually\_taken)
 $$
 

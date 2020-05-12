@@ -1,4 +1,4 @@
-# c09 - Neural Networks I
+# 09 - Neural Networks I
 
 ## Neural Networks
 

@@ -78,6 +78,14 @@ int sumIt(tuple* input, long size, tuple* input2) {
 }
 ```
 
+#### Comparison
+
+Building a software prefetcher is easier because the burden lies with the user to determine is prefetching is beneficial. However, they still need to determine what cache level should be prefetched to, if the cache line should replace a non-prefetched line, and how long it should remain.
+
+Hardware prefetchers need to decide how aggresively they should prefetch cache lines since every false-positive causes bus traffic and causes lines to be evicted.
+
+Factors include current bus traffic, recognised access pattern, access time of least-recently-used cache line,
+
 ### Increasing Cache-line utilisation
 
 
@@ -129,7 +137,7 @@ When allocating memory, we can either:
 - Allocate as much as we could possibly need, but we may be overallocating
 - Allocate a small array, and only `realloc` when we need more space in the output buffer.
 
-It turns out that the second option is much slower than the first despite the fact you are allocating less memory, because you have to 1. check if you need to reallocate on each iteration and 2. reallocation cannot be vectorised.
+It turns out that the second option is much slower than the first despite the fact you are allocating less memory, because you have to (1) check if you need to reallocate on each iteration and (2) reallocation cannot be vectorised.
 
 #### Address Translation
 
@@ -157,3 +165,7 @@ If a memory region is being accessed by one core, and then needs to be accessed 
 #### False Sharing
 
 This is the final control-flow hazard, and only occurs in multicore systems. It happens when two cores attempt to access data that will never be altered by the other, but those data are within the same cache line. This causes high *cache coherence traffic* for no reason, since they never modify the same memory. Hence *false sharing* since they are not actually sharing anything. This can occur when there are two counters on the same cache line.
+
+## Partitioning
+
+Partitioning is restricing a given address to be cached in a subset of the available slots. This reduces the number of slots that need to be considered when retrieving a cache line. Reducing the size of a cache has the same effect.

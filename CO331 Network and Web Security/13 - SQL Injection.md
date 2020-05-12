@@ -31,7 +31,7 @@ The `WHERE` condition is trivially true.
 
 ## SQLi Exploitation
 
-### Find out who you are, what priviliges you have
+### Find out who you are, what privileges you have
 
 ```SQL
 SELECT user();
@@ -65,7 +65,7 @@ SELECT userid, first_name, second_name, NULL from customers
 
 Web-based interaction with a database may not display data as a response. We can use **side channels** to identify if the web app is vulnerable to SQL injection. Most commonly, this involves looking at the *time* it takes to serve a response; also error messages can help identify the vulnerability.
 
-To do this, we can try paylaods that case a delay in processing. 
+To do this, we can try payloads that case a delay in processing. 
 
 - In MySQL: `SLEEP()`
 - In PostgreSQL: `pg_sleep()`
@@ -76,7 +76,7 @@ Untrusted data could be handled securely when it is first inserted into the data
 
 Example:
 
-1. Attacker registers username `admin' --`
+1. Attacker registers username `admin' -- ` **note that you need a whitespace after `--`**
 
 2. Password reset code
 
@@ -89,7 +89,7 @@ Example:
 3. Attacker asks to reset his password to `hacked`
 
    ```SQL
-   UPDATE USERS SET passwd='hacked' WHERE uname = 'admin' --'
+   UPDATE USERS SET passwd='hacked' WHERE uname = 'admin' -- '
    ```
 
 ## Countermeasures
@@ -113,6 +113,6 @@ Example:
 - Rely on a programming framework
   - They have been carefully developed, reviewed, and tested
   - Sometimes vulnerabilities are inherited from the framework
-  - May add uneccessary functionality, increasing the size of the trusted computing base
+  - May add unnecessary functionality, increasing the size of the trusted computing base
   - Users rarely understand all details of framework code, and consequences of using it
 
